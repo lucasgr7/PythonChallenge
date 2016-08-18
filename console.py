@@ -1,7 +1,9 @@
 from source.models import Board, Piece, Position
 
-board = Board(4,4)
-piece = Piece('queen', board, 2,2)
+board = Board(3,3)
+board.add_piece('rook')
+board.add_piece('king')
+board.add_piece('king')
 
-for position in piece.attack_positions:
-	print(position)
+board.set_play(0)
+board.clear()
