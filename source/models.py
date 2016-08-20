@@ -235,12 +235,6 @@ class Board(object):
         piece = self.pieces[count]
         #for each position on the board will passes the piece
         for pos in self.board_positions:
-            if(count==0):
-                print('First moved ' +str(piece))
-            if(count==1):
-                print('Second Move ' + str(piece))
-            if(count==2):
-                print('Third Move ' + str(piece))
             self.iterations += 1
             #if the position is not occupied and either is an attack position of
             # other piece
@@ -248,6 +242,12 @@ class Board(object):
                 #check if this piece placed will threat another piece
                 if not self.will_harm(piece, pos):
                     self.set_piece(piece, pos)
+                    if(count==0):
+                        print('First moved ' +str(piece))
+                    if(count==1):
+                        print('Second Move ' + str(piece))
+                    if(count==2):
+                        print('Third Move ' + str(piece))
                     #if there is another piece will find a position for it
                     if count + 1 < len(self.pieces):
                         self.set_play(count +1)
