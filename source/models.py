@@ -4,7 +4,7 @@ This Module is used to calculate an algorithm of proccess of chess.
 It uses to calculate how many positions of any size board can fill with pices
 into positions that no one can theath each other.
 """
-import copy
+
 
 class Piece(object):
     '''Abstract object to define the pieces used in the algorithm'''
@@ -134,6 +134,7 @@ class Piece(object):
     def __eq__(self, other):
         return self.id == other.id and self.position == other.position
 
+
 class Board(object):
     '''Object to define the board where the pieces will be played'''
     x = 0
@@ -196,8 +197,8 @@ class Board(object):
                     line = line + ' _ |'
                 else:
                     line = line + ' _ |'
-            print(line)
-        print('-----------')
+            print line
+        print '-----------'
 
     def is_occupied(self, position):
         '''
@@ -207,7 +208,6 @@ class Board(object):
                  2 if the position is in the area of attack of another piece
                  0 if it's empty
         '''
-        value = 0
         for piece in self.pieces_in_board:
             if piece.position == position:
                 return 1
@@ -233,7 +233,7 @@ class Board(object):
         return 0
 
     def set_play(self, count):
-        '''Simulates the rotation of pieces in the board'''
+        '''Find a possible position for a piece'''
         piece = self.pieces[count]
         #for each position on the board will passes the piece
         for pos in self.board_positions:
@@ -244,10 +244,6 @@ class Board(object):
                 #check if this piece placed will threat another piece
                 if not self.will_harm(piece, pos):
                     self.set_piece(piece, pos)
-                    if(count==0):
-                        print('First moved ' +str(piece))
-                    if(count==1):
-                        print('Second Move ' + str(piece))
                     #if there is another piece will find a position for it
                     if count + 1 < len(self.pieces):
                         self.set_play(count +1)
@@ -263,24 +259,27 @@ class Board(object):
             self.pieces_in_board.pop(len(self.pieces_in_board)-1)
 
     def save_play(self):
+        '''Save a configurations of pieces valid on the '''
         play_serialized = self.serialize(self.pieces_in_board)
 
         self.saved_plays.add(play_serialized)
         self.count_saved_plays = len(self.saved_plays)
 
     def serialize(self, play):
+        '''Convert a configuration of pieces in the board to a string for storage'''
         value = ''
-        list = []
+        list_values = []
         for piece in play:
-            list.append(int(str(piece.id) + str(piece.position.x) + str(piece.position.y)))
-        list.sort()
-        for item in list:
+            list_values.append(int(str(piece.id) + str(piece.position.x) + str(piece.position.y)))
+        list_values.sort()
+        for item in list_values:
             value += str(item)
         return value
 
     def clear(self):
         '''Clear data from the board object'''
         self.pieces_in_board = []
+
 
 class Position(object):
     '''Abstract object to define positions in the board'''
