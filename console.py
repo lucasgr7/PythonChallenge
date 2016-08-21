@@ -1,9 +1,13 @@
+'''
+Class to run the console application to use the algorithm for the Python Challenge
+'''
 import time
 import os
 
 from source.models import Board
 
-class console_app(object):
+class console_application(object):
+    '''Class to store methods of the application'''
     queens = 0
     bishops = 0
     kings = 0
@@ -12,6 +16,7 @@ class console_app(object):
     board_x = 0
     board_y = 0
     def show_welcome_page(self):
+        '''Prints a welcome page with instructions on the console terminal'''
         os.system('cls')
         print 'Welcome - Python Challenge'
         print 'By Lucas Garcia Ribeiro - 21/08/2016'
@@ -31,6 +36,8 @@ class console_app(object):
         print '0 - Exit'
 
     def add_piece(self, id_piece):
+        '''Print instructions to add piece to the process
+        and return the quantity used by the user'''
         message = 'How many {0} do you wish?'
         if id_piece == 1:
             self.queens = self.input_message(message, 'queens')
@@ -44,59 +51,66 @@ class console_app(object):
             self.rooks = self.input_message(message, 'rooks')
 
     def input_message(self, message, name):
+        '''
+        Method that shows a message to the user and return the input converted to int
+        :param message: static message that always show with 1 arg
+        :param name: The dinamic value from the static message
+        :return: int informed by the user
+        '''
         os.system('cls')
         print message.format(name)
         in_input = raw_input()
         return int(in_input)
 
     def show_message_set_board(self, value):
+        '''Print instructions to set the board specifications'''
         message = 'Please set the {0} of the board'
         if value == 6:
             self.board_y = self.input_message(message, 'Height (Y)')
         if value == 7:
             self.board_x = self.input_message(message, 'Height (X)')
 
-app = console_app()
-app.show_welcome_page()
-in_input = raw_input()
-while in_input != '0':
-    if in_input != '':
-        value_input = int(in_input)
-        if value_input > 0 and value_input < 6:
-            app.add_piece(value_input)
-        elif value_input == 6 or value_input == 7:
-            app.show_message_set_board(value_input)
-        elif value_input == 8:
+APP = console_application()
+APP.show_welcome_page()
+IN_INPUT = raw_input()
+while IN_INPUT != '0':
+    if IN_INPUT != '':
+        VALUE_INPUT = int(IN_INPUT)
+        if VALUE_INPUT > 0 and VALUE_INPUT < 6:
+            APP.add_piece(VALUE_INPUT)
+        elif VALUE_INPUT == 6 or VALUE_INPUT == 7:
+            APP.show_message_set_board(VALUE_INPUT)
+        elif VALUE_INPUT == 8:
             print 'Processing please wait...'
-            board = Board(app.board_x, app.board_y)
-            for rook in range(0, app.rooks):
-                board.add_piece('Rook')
-            for queen in range(0, app.queens):
-                board.add_piece('Queen')            
-            for bishop in range(0, app.bishops):
-                board.add_piece('Bishop')            
-            for king in range(0, app.kings):
-                board.add_piece('King')            
-            for knight in range(0, app.knights):
-                board.add_piece('Knight')
-            if board.x > 0 and board.y > 0:
-                start = time.time()
-                board.set_play(0)
-                end = time.time()
-                print('Number of possible plays : {0}'.format(board.count_saved_plays))
-                print('Number of iterations : {0}'.format(board.iterations))
-                print('Time elapsed : {0} seconds'.format(str(end-start)))
-                print('Do you wish to see configurations sets? Y/N')
-                x_input = raw_input()
-                if x_input.lower() == 'y':
-                    count = 0
-                    for configuration_set in board.saved_plays:
-                        board.show_play(configuration_set)
-                        count += 1
-                        print 'Number: {0}'.format(count)
+            BOARD = Board(APP.board_x, APP.board_y)
+            for rook in range(0, APP.rooks):
+                BOARD.add_piece('Rook')
+            for queen in range(0, APP.queens):
+                BOARD.add_piece('Queen')
+            for bishop in range(0, APP.bishops):
+                BOARD.add_piece('Bishop')
+            for king in range(0, APP.kings):
+                BOARD.add_piece('King')
+            for knight in range(0, APP.knights):
+                BOARD.add_piece('Knight')
+            if BOARD.x > 0 and BOARD.y > 0:
+                START = time.time()
+                BOARD.set_play(0)
+                END = time.time()
+                print 'Number of possible plays : {0}'.format(BOARD.count_saved_plays)
+                print 'Number of iterations : {0}'.format(BOARD.iterations)
+                print 'Time elapsed : {0} seconds'.format(str(END - START))
+                print 'Do you wish to see configurations sets? Y/N'
+                X_INPUT = raw_input()
+                if X_INPUT.lower() == 'y':
+                    COUNT = 0
+                    for configuration_set in BOARD.saved_plays:
+                        BOARD.show_play(configuration_set)
+                        COUNT += 1
+                        print 'Number: {0}'.format(COUNT)
                         print '\n'
 
-                print('Press ENTER to continue')
+                print 'Press ENTER to continue'
                 raw_input()
             else:
                 print 'Sorry the board needs to have length and height to calculate!'
@@ -104,5 +118,5 @@ while in_input != '0':
 
 
 
-    app.show_welcome_page()
-    in_input = raw_input()
+    APP.show_welcome_page()
+    IN_INPUT = raw_input()
