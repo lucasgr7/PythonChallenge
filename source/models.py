@@ -157,9 +157,9 @@ class Board(object):
         self.iterations = 0
         self.count_saved_plays = 0
 
-        for position_x in range(0, self.x):
-            for position_y in range(0, self.y):
-                self.board_positions.append(Position(position_x, position_y))
+        for pos_x in range(0, self.x):
+            for pos_y in range(0, self.y):
+                self.board_positions.append(Position(pos_x, pos_y))
 
     def add_piece(self, piece_name):
         '''Add one piece to the game'''
@@ -184,7 +184,27 @@ class Board(object):
 
     def show_play(self, play):
         '''Show on the console the play'''
-        self.pieces_in_board = play
+        pieces_in_game = len(play) / 3
+        range_piece = 0
+        pieces = []
+        for it in range(0, pieces_in_game):
+            piece_string = play[range_piece: range_piece+3]
+            show_piece = None
+            if piece_string[0:1] == '1':
+                show_piece = Piece('Queen', self)
+            elif piece_string[0:1] == '2':
+                show_piece = Piece('Bishop', self)
+            elif piece_string[0:1] == '3':
+                show_piece = Piece('King', self)
+            elif piece_string[0:1] == '4':
+                show_piece = Piece('Knight', self)
+            elif piece_string[0:1] == '5':
+                show_piece = Piece('Rook', self)
+            show_piece.set_position(Position(int(piece_string[1]), int(piece_string[2])))
+            pieces.append(show_piece)
+            range_piece += 3
+
+        self.pieces_in_board = pieces
         for positon_x in range(0, self.x):
             line = ''
             for position_y in range(0, self.y):
@@ -198,7 +218,7 @@ class Board(object):
                 else:
                     line = line + ' _ |'
             print line
-        print '-----------'
+        print '----------------'
 
     def is_occupied(self, position):
         '''
