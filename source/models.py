@@ -34,23 +34,23 @@ class Piece(object):
             raise ValueError('Board must be defined so can generate the attack positions')
 
         if self.name.lower() == 'rook':
-            self.id = 1
+            self.id = 5
             self.rook_moves()
 
         if self.name.lower() == 'knight':
-            self.id = 2
+            self.id = 4
             self.knight_moves()
 
         if self.name.lower() == 'bishop':
-            self.id = 3
+            self.id = 2
             self.bishop_moves()
 
         if self.name.lower() == 'king':
-            self.id = 4
+            self.id = 3
             self.king_moves()
 
         if self.name.lower() == 'queen':
-            self.id = 5
+            self.id = 1
             self.rook_moves()
             self.bishop_moves()
 
@@ -118,7 +118,9 @@ class Piece(object):
             for at_positions in self.attack_positions:
                 if at_positions == target:
                     return
-        if target != self.position and target.x < self.board.x and target.y < self.board.y:
+        if target.x == self.position.x and target.y == self.position.y:
+            return
+        if target.x < self.board.x and target.y < self.board.y:
             if target.x >= 0 and target.y >= 0:
                 self.attack_positions.append(target)
 
@@ -139,7 +141,7 @@ class Board(object):
     pieces = []
     board_positions = []
     pieces_in_board = []
-    saved_plays = []
+    saved_plays = set()
     iterations = 0
     count_saved_plays = 0
 
@@ -150,7 +152,7 @@ class Board(object):
         self.pieces = []
         self.board_positions = []
         self.pieces_in_board = []
-        self.saved_plays = []
+        self.saved_plays = set()
         self.iterations = 0
         self.count_saved_plays = 0
 
@@ -246,8 +248,6 @@ class Board(object):
                         print('First moved ' +str(piece))
                     if(count==1):
                         print('Second Move ' + str(piece))
-                    if(count==2):
-                        print('Third Move ' + str(piece))
                     #if there is another piece will find a position for it
                     if count + 1 < len(self.pieces):
                         self.set_play(count +1)
@@ -263,19 +263,20 @@ class Board(object):
             self.pieces_in_board.pop(len(self.pieces_in_board)-1)
 
     def save_play(self):
-        '''Save the play as a approved positioning of the pieces'''
-        if len(self.saved_plays) > 0:
-            for play in self.saved_plays[::-1]:
-                repet = 0
-                for board_piece in self.pieces_in_board:
-                    for saved_piece in play:
-                        if board_piece.id == saved_piece.id and board_piece.position == saved_piece.position:
-                            repet += 1
-                if repet == len(self.pieces_in_board):
-                    return
+        play_serialized = self.serialize(self.pieces_in_board)
 
-        self.saved_plays.append(copy.deepcopy(self.pieces_in_board))
-        self.count_saved_plays += 1
+        self.saved_plays.add(play_serialized)
+        self.count_saved_plays = len(self.saved_plays)
+
+    def serialize(self, play):
+        value = ''
+        list = []
+        for piece in play:
+            list.append(int(str(piece.id) + str(piece.position.x) + str(piece.position.y)))
+        list.sort()
+        for item in list:
+            value += str(item)
+        return value
 
     def clear(self):
         '''Clear data from the board object'''

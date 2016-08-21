@@ -1,8 +1,8 @@
 import time
 
-from source.models import Board, Piece, Position
+from source.models import Board
 
-board = Board(6,6)
+board = Board(7, 7)
 board.add_piece('Queen')
 board.add_piece('Queen')
 board.add_piece('Bishop')
